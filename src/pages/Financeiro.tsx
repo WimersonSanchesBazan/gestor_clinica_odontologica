@@ -90,7 +90,7 @@ export default function Financeiro() {
     <div className="flex flex-col h-full gap-6 animate-fade-in relative">
       <div className="absolute top-0 right-0 w-[600px] h-[300px] pointer-events-none overflow-hidden rounded-bl-3xl opacity-5 mix-blend-multiply z-0">
         <img
-          src="https://img.usecurling.com/p/800/300?q=vintage%20medical%20apothecary%20herbs&color=black&dpr=2"
+          src="https://img.usecurling.com/p/800/300?q=dentist%20tools&color=black&dpr=2"
           alt=""
           className="w-full h-full object-cover object-right-top"
         />

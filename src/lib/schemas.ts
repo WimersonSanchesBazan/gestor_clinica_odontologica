@@ -20,7 +20,7 @@ export const colaboradorSchema = z.object({
   perfilAcesso: z.enum(['admin', 'medico', 'secretaria', 'financeiro']),
   email: z.string().email('E-mail inválido').optional().or(z.literal('')),
   telefone: z.string().optional().or(z.literal('')),
-  ativo: z.boolean().default(true),
+  ativo: z.boolean().optional(),
   profissionalVinculado: z.string().optional(),
 })
 

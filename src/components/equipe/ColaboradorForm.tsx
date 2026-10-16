@@ -50,7 +50,7 @@ export function ColaboradorForm({ colaborador, onSuccess }: Props) {
   const [profissionais, setProfissionais] = useState<Profissional[]>([])
 
   const form = useForm<ColaboradorFormData>({
-    resolver: zodResolver(colaboradorSchema),
+    resolver: zodResolver(colaboradorSchema) as any,
     defaultValues: {
       nome: colaborador?.nome || '',
       cpf: colaborador?.cpf || '',

@@ -19,12 +19,12 @@ import { toast } from 'sonner'
 
 const schema = z.object({
   tipo: z.enum(['receita', 'despesa']),
-  valor: z.preprocess((v) => Number(v), z.number().positive()),
+  valor: z.coerce.number().positive(),
   categoria: z.string().min(1),
   data: z.string(),
   dataVencimento: z.string().optional(),
   formaPagamento: z.string(),
-  parcelas: z.preprocess((v) => Number(v) || 1, z.number().optional()),
+  parcelas: z.coerce.number().optional(),
   status: z.string(),
   paciente: z.string().optional(),
   convenio: z.string().optional(),
@@ -48,7 +48,7 @@ export function TransactionModal({ open, onOpenChange, transaction, onSaved }: a
     reset,
     formState: { isValid },
   } = useForm<FormValues>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(schema) as any,
     defaultValues: {
       tipo: 'receita',
       valor: 0,

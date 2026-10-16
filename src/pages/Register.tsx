@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { toast } from 'sonner'
-import { Stethoscope } from 'lucide-react'
 import { extractFieldErrors } from '@/lib/pocketbase/errors'
 import loginBgImage from '../assets/gestao-login-bg-v4-clean-row-b157a.png'
 
@@ -62,29 +61,38 @@ export default function Register() {
       className="min-h-screen w-full flex items-center justify-center lg:justify-start bg-cover bg-center bg-no-repeat font-sans px-4 sm:px-8 md:px-12 lg:px-24 xl:px-32 py-8"
       style={{ backgroundImage: `url(${loginBgImage})` }}
     >
-      {/* Floating Login Container */}
       <div className="w-full max-w-[420px] bg-[#f8f9fa] rounded-[28px] p-8 sm:p-10 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.15)] max-h-full overflow-y-auto">
         {/* Logo and App Name */}
         <div className="flex items-center gap-3 mb-6">
           <div className="w-10 h-10 rounded-[12px] bg-white border border-gray-100 flex items-center justify-center text-[#8b7fb8] shadow-sm">
-            <Stethoscope className="w-5 h-5" strokeWidth={2} />
+            <svg
+              className="w-5 h-5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M12 2C7.5 2 4 4.5 4 8c0 2.5 1 4.5 2 7l1 5c.5 1.5 2 2 3 2s2-.5 2-2l.5-4h-.5c.8 0 1.2-.5 1.2-1 0 .5.4 1 1.2 1h-.5l.5 4c0 1.5 1 2 2 2s2.5-.5 3-2l1-5c1-2.5 2-4.5 2-7 0-3.5-3.5-6-8-6z" />
+            </svg>
           </div>
           <div>
             <h1 className="font-display font-bold text-gray-900 text-lg leading-tight tracking-tight">
-              ClínicaPro
+              OdontoGestão
             </h1>
             <p className="text-[9px] font-bold text-gray-500 tracking-widest mt-0.5 uppercase">
-              Sistema de Gestão
+              Clínica Odontológica
             </p>
           </div>
         </div>
 
         {/* Headings */}
         <h2 className="text-[26px] font-display font-bold text-gray-900 leading-[1.2] mb-2 tracking-tight">
-          Crie sua conta na ClínicaPro
+          Crie sua conta clínica
         </h2>
         <p className="text-gray-500 text-sm mb-6 leading-relaxed">
-          Preencha os dados abaixo para iniciar sua jornada.
+          Preencha os dados abaixo para iniciar a gestão da clínica.
         </p>
 
         {/* Form */}
@@ -99,7 +107,7 @@ export default function Register() {
             <Input
               id="name"
               type="text"
-              placeholder="Ex: João da Silva"
+              placeholder="Ex: Dra. Mariana Costa"
               value={name}
               onChange={(e) => setName(e.target.value)}
               className={`bg-[#f0f4f8] border-transparent focus-visible:ring-[#8b7fb8] focus-visible:bg-white h-11 text-sm rounded-xl transition-all ${fieldErrors.name ? 'border-red-300 focus-visible:ring-red-500 bg-red-50' : ''}`}
@@ -115,12 +123,12 @@ export default function Register() {
               htmlFor="email"
               className="text-[10px] font-bold text-gray-500 tracking-wider uppercase"
             >
-              E-mail
+              E-mail Profissional
             </Label>
             <Input
               id="email"
               type="email"
-              placeholder="seu@email.com"
+              placeholder="mariana@clinica.com.br"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className={`bg-[#f0f4f8] border-transparent focus-visible:ring-[#8b7fb8] focus-visible:bg-white h-11 text-sm rounded-xl transition-all ${fieldErrors.email ? 'border-red-300 focus-visible:ring-red-500 bg-red-50' : ''}`}

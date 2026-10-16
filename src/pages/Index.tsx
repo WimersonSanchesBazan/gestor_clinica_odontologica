@@ -27,10 +27,10 @@ export default function Index() {
 
   return (
     <div className="flex flex-col h-full gap-6 animate-fade-in relative">
-      {/* Background imagery for header */}
+      {/* Dental subtle imagery for header */}
       <div className="absolute top-0 right-0 w-[600px] h-[300px] pointer-events-none overflow-hidden rounded-bl-3xl opacity-5 mix-blend-multiply z-0">
         <img
-          src="https://img.usecurling.com/p/600/300?q=medical%20stethoscope&color=black"
+          src="https://img.usecurling.com/p/600/300?q=dental%20clinic&color=black"
           alt=""
           className="w-full h-full object-cover object-right-top"
         />
