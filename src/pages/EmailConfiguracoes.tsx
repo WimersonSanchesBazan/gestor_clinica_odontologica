@@ -206,7 +206,8 @@ export default function EmailConfiguracoes() {
             E-mail e Recuperação de Senha
           </h1>
           <p className="text-sm text-gray-500 mt-1">
-            Configure o canal de envio de e-mails transacionais para recuperação de senhas e avisos.
+            Painel informativo de parâmetros de remetente e testes de entrega de e-mails
+            transacionais.
           </p>
         </div>
 
@@ -215,23 +216,23 @@ export default function EmailConfiguracoes() {
           className="bg-lavender hover:bg-lavender/90 text-white shadow-sm"
         >
           <Server className="w-4 h-4 mr-2" />
-          Configurar E-mail
+          Editar Parâmetros Informativos
         </Button>
       </div>
 
-      {/* Security Banner regarding Gmail App Passwords & Secrets */}
-      <div className="bg-blue-50/70 border border-blue-200 rounded-xl p-4 flex items-start gap-3.5 text-xs text-blue-900">
-        <ShieldCheck className="w-5 h-5 text-blue-600 mt-0.5 shrink-0" />
+      {/* Notice on Real Mailer vs Informative Settings */}
+      <div className="bg-amber-50/80 border border-amber-200 rounded-xl p-4 flex items-start gap-3.5 text-xs text-amber-950">
+        <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" />
         <div className="space-y-1">
-          <p className="font-semibold text-blue-950">
-            Boas Práticas de Segurança e Envio Confiável
+          <p className="font-semibold text-amber-950">
+            Aviso de Operação da Mensageria (Mailer Gerenciado Skip Cloud)
           </p>
-          <p className="text-blue-800 leading-relaxed">
-            Nunca utilize a senha comum da sua conta Google ou pessoal. Para o Gmail, gere uma{' '}
-            <strong>Senha de Aplicativo (16 dígitos)</strong> no painel de segurança do Google. O
-            sistema armazena as credenciais de forma segura e nunca exibe o segredo no frontend após
-            salvo. Os links de recuperação utilizam o endereço público da clínica com expiração de
-            60 minutos e uso único.
+          <p className="text-amber-900 leading-relaxed">
+            O envio real de mensagens da plataforma é processado diretamente pelo serviço gerenciado
+            do backend (Skip Cloud / PocketBase). Configurações de SMTP externo (como Gmail com
+            senha de aplicativo) requerem parametrização direta nas configurações da instância no
+            painel administrativo do PocketBase. Os campos abaixo definem os dados de remetente e a
+            URL base dos links de redefinição de senha.
           </p>
         </div>
       </div>
@@ -244,21 +245,17 @@ export default function EmailConfiguracoes() {
             <div className="flex items-center justify-between">
               <CardTitle className="text-base font-semibold text-gray-900 flex items-center gap-2">
                 <Mail className="w-4 h-4 text-lavender" />
-                Provedor de E-mail Atual
+                Remetente e Parâmetros Informativos
               </CardTitle>
               <Badge
                 variant="outline"
                 className="bg-lavender-soft text-lavender border-lavender/20 uppercase font-mono text-[10px]"
               >
-                {settings.provider === 'gmail'
-                  ? 'Gmail SMTP'
-                  : settings.provider === 'smtp'
-                    ? 'SMTP Personalizado'
-                    : 'Skip Cloud Transacional'}
+                Mailer: Skip Cloud Ativo
               </Badge>
             </div>
             <CardDescription className="text-xs">
-              Status das configurações de envio da clínica
+              Identificação do remetente e endereço público dos links
             </CardDescription>
           </CardHeader>
 
@@ -275,16 +272,15 @@ export default function EmailConfiguracoes() {
                 </span>
               </div>
               <div className="py-2.5 flex justify-between items-center">
-                <span className="text-gray-500 text-xs">Servidor SMTP</span>
-                <span className="font-mono text-xs text-gray-900">
-                  {settings.smtpHost}:{settings.smtpPort} ({settings.security?.toUpperCase()})
+                <span className="text-gray-500 text-xs">Modo de Envio Real</span>
+                <span className="text-xs font-medium text-purple-700">
+                  Skip Cloud Transacional (Serviço de Mailer Gerenciado)
                 </span>
               </div>
               <div className="py-2.5 flex justify-between items-center">
-                <span className="text-gray-500 text-xs">Credencial de Aplicativo</span>
-                <span className="text-xs flex items-center gap-1 font-medium text-emerald-700">
-                  <Lock className="w-3.5 h-3.5 text-emerald-600" />
-                  {settings.hasAppPassword ? 'Configurada com segurança' : 'Pendente'}
+                <span className="text-gray-500 text-xs">SMTP Próprio Externo</span>
+                <span className="text-xs text-gray-500">
+                  Requer parametrização no Painel do Servidor
                 </span>
               </div>
               <div className="py-2.5 flex justify-between items-center">
@@ -375,9 +371,10 @@ export default function EmailConfiguracoes() {
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent className="sm:max-w-xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Configurar Mensageria e Servidor de E-mail</DialogTitle>
+            <DialogTitle>Parâmetros de Mensageria e Remetente</DialogTitle>
             <DialogDescription>
-              Defina as credenciais para envio de e-mails transacionais e recuperação de senhas.
+              Ajuste o nome de exibição do remetente, e-mail institucional e a URL pública da
+              aplicação.
             </DialogDescription>
           </DialogHeader>
 

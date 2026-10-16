@@ -152,16 +152,11 @@ export default function Login() {
           </div>
         </form>
 
-        {/* Navigation Link */}
+        {/* Navigation Notice */}
         <div className="mt-8 text-center pt-4 border-t border-gray-100">
-          <p className="text-sm text-gray-500">
-            Primeiro acesso na clínica?{' '}
-            <Link
-              to="/register"
-              className="text-[#8b7fb8] font-semibold hover:text-[#7a6ea6] transition-colors"
-            >
-              Criar conta
-            </Link>
+          <p className="text-xs text-gray-500 leading-relaxed">
+            Acesso exclusivo para profissionais autorizados da clínica. Para cadastros e novos
+            acessos, contate o administrador do sistema.
           </p>
         </div>
       </div>

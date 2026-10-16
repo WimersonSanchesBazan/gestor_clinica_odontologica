@@ -61,7 +61,9 @@ export default function ForgotPassword() {
             </div>
 
             <p className="text-xs text-gray-500 text-center">
-              O link gerado é de uso único e expira automaticamente em 60 minutos por segurança.
+              O link gerado é de uso único, com expiração padrão gerenciada pelo servidor (até 30
+              minutos). Após a redefinição ou uma nova solicitação, links anteriores são invalidados
+              automaticamente.
             </p>
 
             <Link to="/login" className="block">
@@ -80,8 +82,8 @@ export default function ForgotPassword() {
               Esqueceu sua senha?
             </h2>
             <p className="text-gray-500 text-sm mb-6 leading-relaxed">
-              Informe seu e-mail cadastrado. Enviaremos as instruções de recuperação com token de
-              uso único.
+              Informe seu e-mail cadastrado. Enviaremos as instruções de recuperação com token
+              criptográfico de uso único gerenciado com segurança pelo servidor.
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-5">

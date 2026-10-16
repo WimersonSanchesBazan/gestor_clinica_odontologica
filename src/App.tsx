@@ -12,7 +12,6 @@ import Equipe from '@/pages/Equipe'
 import CRM from '@/pages/CRM'
 import PatientHistory from '@/pages/PatientHistory'
 import Login from '@/pages/Login'
-import Register from '@/pages/Register'
 import ForgotPassword from '@/pages/ForgotPassword'
 import ResetPassword from '@/pages/ResetPassword'
 import UsuariosAcessos from '@/pages/UsuariosAcessos'
@@ -55,7 +54,6 @@ const AppRoutes = () => (
   <Routes>
     {/* Public Auth Routes */}
     <Route path="/login" element={<Login />} />
-    <Route path="/register" element={<Register />} />
     <Route path="/esqueci-senha" element={<ForgotPassword />} />
     <Route path="/reset-password" element={<ResetPassword />} />
     <Route path="/redefinir-senha" element={<ResetPassword />} />

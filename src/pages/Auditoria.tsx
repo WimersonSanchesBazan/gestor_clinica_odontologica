@@ -64,6 +64,16 @@ const ACTION_LABELS: Record<string, { label: string; tone: string; icon: any }> 
     tone: 'bg-rose-50 text-rose-700 border-rose-200',
     icon: Mail,
   },
+  email_settings_updated: {
+    label: 'Configuração de E-mail Atualizada',
+    tone: 'bg-blue-50 text-blue-700 border-blue-200',
+    icon: Mail,
+  },
+  user_inactivated: {
+    label: 'Inativação de Usuário',
+    tone: 'bg-rose-50 text-rose-700 border-rose-200',
+    icon: UserX,
+  },
 }
 
 export default function Auditoria() {

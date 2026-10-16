@@ -18,7 +18,6 @@ interface AuthContextType {
   ativo: boolean
   permissions: UserPermissions
   signIn: (email: string, password: string) => Promise<{ error: any }>
-  signUp: (email: string, password: string, name: string) => Promise<{ error: any }>
   signOut: () => void
   requestPasswordReset: (email: string) => Promise<{ error: any }>
   confirmPasswordReset: (token: string, password: string) => Promise<{ error: any }>
@@ -75,29 +74,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
-  const signUp = async (email: string, password: string, name: string) => {
+  const signOut = () => {
+    // Notify server-side logout endpoint to audit event on server
     try {
-      await pb.collection('users').create({
-        email,
-        password,
-        passwordConfirm: password,
-        name,
-        role: 'clinico',
-        ativo: true,
-      })
-
-      // Send verification email (best effort)
-      try {
-        await pb.collection('users').requestVerification(email)
-      } catch (_) {
-        // best effort
-      }
-
-      await pb.collection('users').authWithPassword(email, password)
-      return { error: null }
-    } catch (error) {
-      return { error }
+      pb.send('/backend/v1/custom/auth/logout', { method: 'POST' }).catch(() => {})
+    } catch {
+      /* intentionally ignored */
     }
+    pb.authStore.clear()
   }
 
   const requestPasswordReset = async (email: string) => {
@@ -139,22 +123,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
-  const signOut = () => {
-    // Audit log logout if possible
-    if (user?.id) {
-      pb.collection('audit_logs')
-        .create({
-          action: 'logout',
-          userId: user.id,
-          userEmail: user.email || '',
-          targetEntity: 'users',
-          targetId: user.id,
-        })
-        .catch(() => {})
-    }
-    pb.authStore.clear()
-  }
-
   return (
     <AuthContext.Provider
       value={{
@@ -163,7 +131,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         ativo: isAtivo,
         permissions: computedPermissions,
         signIn,
-        signUp,
         signOut,
         requestPasswordReset,
         confirmPasswordReset,
