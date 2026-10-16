@@ -1,4 +1,3 @@
-/* Tailwind config for the frontend react app. This is where the app theme should be defined: https://v2.tailwindcss.com/docs/configuration. */
 import type { Config } from 'tailwindcss'
 import animatePlugin from 'tailwindcss-animate'
 import typographyPlugin from '@tailwindcss/typography'
@@ -27,8 +26,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['Inter var', 'SF Pro Display', 'system-ui', 'sans-serif'],
-        display: ['SF Pro Display', 'Inter var', 'system-ui', 'sans-serif'],
+        sans: ['Inter', 'sans-serif'],
+        display: ['DM Sans', 'sans-serif'],
+        mono: ['IBM Plex Mono', 'monospace'],
       },
       colors: {
         border: 'hsl(var(--border))',
@@ -64,22 +64,21 @@ export default {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
-        sidebar: {
-          DEFAULT: 'hsl(var(--sidebar-background))',
-          foreground: 'hsl(var(--sidebar-foreground))',
-          primary: 'hsl(var(--sidebar-primary))',
-          'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
-          accent: 'hsl(var(--sidebar-accent))',
-          'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
-          border: 'hsl(var(--sidebar-border))',
-          ring: 'hsl(var(--sidebar-ring))',
+        lavender: {
+          DEFAULT: '#8b7fb8',
+          soft: '#f3f1f8',
         },
-        chart: {
-          1: 'hsl(var(--chart-1))',
-          2: 'hsl(var(--chart-2))',
-          3: 'hsl(var(--chart-3))',
-          4: 'hsl(var(--chart-4))',
-          5: 'hsl(var(--chart-5))',
+        mint: {
+          DEFAULT: '#87a596',
+          soft: '#f0f5f3',
+        },
+        ochre: {
+          DEFAULT: '#c9b896',
+          soft: '#f8f5f0',
+        },
+        bordeaux: {
+          DEFAULT: '#d4a5a5',
+          soft: '#f8f1f1',
         },
       },
       borderRadius: {
@@ -87,16 +86,10 @@ export default {
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
       },
-      transitionProperty: {
-        width: 'width',
-        height: 'height',
-      },
       boxShadow: {
         subtle: '0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.03)',
         elevation: '0 4px 20px rgba(0, 0, 0, 0.05)',
-      },
-      transitionTimingFunction: {
-        apple: 'cubic-bezier(0.42, 0, 0.58, 1)',
+        'lavender-glow': '0 4px 20px -2px rgba(139, 127, 184, 0.25)',
       },
     },
   },
