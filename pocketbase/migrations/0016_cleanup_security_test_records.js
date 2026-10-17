@@ -8,6 +8,7 @@ migrate(
       'sec_inativo_run@clinica.com.br',
     ]
 
+    // Deletar usuários de teste por email e por ID para garantir exclusão completa
     for (let i = 0; i < testEmails.length; i++) {
       const email = testEmails[i]
       try {
@@ -16,10 +17,41 @@ migrate(
       } catch (_) {
         // Usuário não existe ou já foi excluído
       }
+      try {
+        const userRec = app.findAuthRecordByEmail('users', email)
+        app.delete(userRec)
+      } catch (_) {}
+    }
+
+    const testUserIds = ['y3tj5addhhoagcx', 'q8m8d8ra36k7mrs', 'ij60f31x86u5t1m', 'eopewa1qicr2g47']
+    for (let i = 0; i < testUserIds.length; i++) {
+      try {
+        const u = app.findRecordById('_pb_users_auth_', testUserIds[i])
+        app.delete(u)
+      } catch (_) {}
+      try {
+        const u = app.findRecordById('users', testUserIds[i])
+        app.delete(u)
+      } catch (_) {}
     }
 
     // Limpeza de logs de auditoria gerados exclusivamente pelas contas de teste ou seus IDs
     const testIds = ['y3tj5addhhoagcx', 'q8m8d8ra36k7mrs', 'ij60f31x86u5t1m', 'eopewa1qicr2g47']
+
+    try {
+      const confirmLog = app.findRecordsByFilter(
+        'audit_logs',
+        "userEmail = 'confirmacao_hook@clinica.com.br'",
+        '',
+        50,
+        0,
+      )
+      for (let k = 0; k < confirmLog.length; k++) {
+        try {
+          app.delete(confirmLog[k])
+        } catch (_) {}
+      }
+    } catch (_) {}
 
     for (let i = 0; i < testEmails.length; i++) {
       const email = testEmails[i]
