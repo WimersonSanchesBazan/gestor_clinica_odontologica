@@ -322,15 +322,14 @@ export default function EmailConfiguracoes() {
               <p className="font-semibold text-blue-950">Aviso sobre o Envio e Mailer</p>
               <p className="text-blue-800 leading-relaxed">
                 Selecionar Gmail/SMTP neste formulário define apenas os parâmetros informativos da
-                aplicação; o envio real do teste continua utilizando o serviço gerenciado{' '}
-                <code className="bg-blue-100 px-1 py-0.5 rounded font-mono text-[11px]">
-                  e.app.newMailClient()
-                </code>
-                . O teste bem-sucedido indica que o envio foi aceito pelo serviço de mensageria da
-                instância, não constituindo garantia de entrega na caixa postal final (sujeita a
-                políticas antispam, DNS/SPF/DKIM e configuração do servidor).
+                aplicação (como nome e e-mail exibidos); este formulário NÃO altera o mailer SMTP
+                real do PocketBase. A configuração do mailer SMTP real deve ser realizada no painel
+                administrativo da instância (/_ &gt; Settings &gt; Mail settings). O botão abaixo
+                aciona um teste via serviço gerenciado; se bem-sucedido, o e-mail foi aceito pelo
+                serviço da instância, sem confirmação de entrega física caso o SMTP não esteja
+                configurado.
               </p>
-            </div>
+            </div>{' '}
             <div className="space-y-1.5">
               <Label htmlFor="test-dest" className="text-xs font-semibold text-gray-700">
                 E-mail Destinatário de Teste
@@ -344,7 +343,6 @@ export default function EmailConfiguracoes() {
                 className="h-10 text-sm"
               />
             </div>
-
             <Button
               onClick={handleSendTestEmail}
               disabled={isTesting || !testEmailRecipient}
@@ -362,7 +360,6 @@ export default function EmailConfiguracoes() {
                 </>
               )}
             </Button>
-
             {settings.lastTestedAt && (
               <div className="p-3 bg-gray-50 border border-gray-100 rounded-lg text-xs space-y-1">
                 <div className="flex items-center justify-between font-medium text-gray-700">
@@ -494,8 +491,8 @@ export default function EmailConfiguracoes() {
               <div className="space-y-1.5 sm:col-span-2">
                 <Label htmlFor="f-pass">
                   {formProvider === 'gmail'
-                    ? 'Senha de Aplicativo do Google (16 caracteres)'
-                    : 'Senha do Servidor SMTP'}
+                    ? 'Senha de Aplicativo do Google (Informativo)'
+                    : 'Senha do Servidor SMTP (Informativo)'}
                 </Label>
                 <Input
                   id="f-pass"
@@ -504,14 +501,15 @@ export default function EmailConfiguracoes() {
                   onChange={(e) => setFormAppPassword(e.target.value)}
                   placeholder={
                     settings.hasAppPassword
-                      ? '•••••••••••••••• (deixe em branco para manter a senha atual)'
+                      ? '•••••••••••••••• (deixe em branco para manter a indicação atual)'
                       : 'Digite a senha de aplicativo'
                   }
                   disabled={formProvider === 'skip_cloud'}
                 />
-                <p className="text-[11px] text-gray-500">
-                  Por razões de segurança, a senha salva nunca é reexibida. Preencha apenas se
-                  desejar substituir.
+                <p className="text-[11px] text-amber-700">
+                  Nota: Esta credencial armazenada aqui é apenas informativa e NÃO configura o
+                  mailer do PocketBase. Para envio de e-mails reais via SMTP, configure
+                  obrigatoriamente no painel administrativo em /_ &gt; Settings &gt; Mail settings.
                 </p>
               </div>
 

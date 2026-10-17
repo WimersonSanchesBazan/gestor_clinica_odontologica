@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-17T21:25:31.169Z",
+  "generatedAt": "2026-10-17T21:40:00.856Z",
   "collections": [
     {
       "name": "users",
@@ -769,52 +769,6 @@
         },
         {
           "name": "lastTestStatus",
-          "type": "text",
-          "required": false,
-          "system": false
-        },
-        {
-          "name": "created",
-          "type": "autodate",
-          "required": false,
-          "system": false,
-          "autodateTriggers": ["onCreate"]
-        },
-        {
-          "name": "updated",
-          "type": "autodate",
-          "required": false,
-          "system": false,
-          "autodateTriggers": ["onCreate", "onUpdate"]
-        }
-      ],
-      "indexes": []
-    },
-    {
-      "name": "sec_test_results",
-      "type": "base",
-      "apiRules": {
-        "list": "",
-        "view": "",
-        "create": "",
-        "update": "",
-        "delete": ""
-      },
-      "fields": [
-        {
-          "name": "testName",
-          "type": "text",
-          "required": true,
-          "system": false
-        },
-        {
-          "name": "status",
-          "type": "text",
-          "required": true,
-          "system": false
-        },
-        {
-          "name": "details",
           "type": "text",
           "required": false,
           "system": false

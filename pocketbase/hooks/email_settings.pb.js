@@ -61,7 +61,7 @@ routerAdd('POST', '/backend/v1/custom/test-email', (e) => {
       message:
         'Envio de teste aceito pelo serviço gerenciado da instância para ' +
         targetEmail +
-        '. A entrega real na caixa de entrada depende do mailer da instância.',
+        '. AVISO: O formulário da aplicação não altera o mailer SMTP real do PocketBase. A entrega real na caixa de entrada depende do SMTP configurado no painel administrativo (/_ > Settings > Mail settings).',
     })
   } catch (err) {
     // Audit failed attempt: Sanitize error messages before persisting.
