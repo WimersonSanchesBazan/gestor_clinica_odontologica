@@ -12,6 +12,24 @@ export interface UserPermissions {
   canEditCRM?: boolean
 }
 
+/**
+ * PERMISSÕES DO SISTEMA (Role-Based Access Control - RBAC)
+ *
+ * Esclarecimento arquitetural (Sprint de Correções de Segurança):
+ * Nesta fase da aplicação, o sistema adota permissões estritamente fixas por perfil (RBAC por role),
+ * sem declaração de granularidade customizada por usuário.
+ *
+ * Regra fundamental:
+ * - O frontend reflete estas permissões para renderização de menu e navegação protegida.
+ * - A autorização real e compulsória é executada no servidor (PocketBase API Rules e hooks pb_hooks)
+ *   com base no campo `role` autenticado em `@request.auth.role`.
+ * - Não declare uma permissão como protegida se ela estiver apenas no frontend.
+ *   Coleções protegidas no backend:
+ *   - users: create/delete/list admin-only; update bloqueia role/ativo/permissions/email; gestor/clinico apenas id próprio.
+ *   - lancamentos_financeiros: admin e gestor apenas.
+ *   - audit_logs: createRule null (exclusivo do servidor/hooks), view/list admin e gestor.
+ *   - email_settings: admin apenas.
+ */
 export const ROLE_DEFAULT_PERMISSIONS: Record<UserRole, UserPermissions> = {
   admin: {
     canViewDashboard: true,

@@ -171,11 +171,12 @@ export default function EmailConfiguracoes() {
       )
 
       if (res.success) {
-        toast.success(res.message || 'E-mail de teste disparado com sucesso!')
+        toast.success(res.message || 'Envio aceito pelo serviço gerenciado da instância.')
         if (settings.id) {
           await pb.collection('email_settings').update(settings.id, {
             lastTestedAt: new Date().toISOString(),
-            lastTestStatus: 'Sucesso: e-mail entregue ao servidor de envio',
+            lastTestStatus:
+              'Envio aceito pelo serviço (teste de entrega real depende do mailer configurado na instância)',
           })
           loadSettings()
         }
@@ -317,11 +318,19 @@ export default function EmailConfiguracoes() {
           </CardHeader>
 
           <CardContent className="space-y-4 text-sm">
-            <p className="text-xs text-gray-600">
-              Envie uma mensagem de teste para verificar a integridade da conexão, resolução DNS e
-              autorização do remetente. O resultado será registrado no log de auditoria.
-            </p>
-
+            <div className="bg-blue-50/70 border border-blue-200/80 rounded-lg p-3 text-xs text-blue-900 space-y-1">
+              <p className="font-semibold text-blue-950">Aviso sobre o Envio e Mailer</p>
+              <p className="text-blue-800 leading-relaxed">
+                Selecionar Gmail/SMTP neste formulário define apenas os parâmetros informativos da
+                aplicação; o envio real do teste continua utilizando o serviço gerenciado{' '}
+                <code className="bg-blue-100 px-1 py-0.5 rounded font-mono text-[11px]">
+                  e.app.newMailClient()
+                </code>
+                . O teste bem-sucedido indica que o envio foi aceito pelo serviço de mensageria da
+                instância, não constituindo garantia de entrega na caixa postal final (sujeita a
+                políticas antispam, DNS/SPF/DKIM e configuração do servidor).
+              </p>
+            </div>
             <div className="space-y-1.5">
               <Label htmlFor="test-dest" className="text-xs font-semibold text-gray-700">
                 E-mail Destinatário de Teste

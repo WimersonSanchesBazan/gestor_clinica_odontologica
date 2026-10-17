@@ -58,10 +58,36 @@ routerAdd('POST', '/backend/v1/custom/test-email', (e) => {
 
     return e.json(200, {
       success: true,
-      message: 'E-mail de teste enviado com sucesso para ' + targetEmail,
+      message:
+        'Envio de teste aceito pelo serviço gerenciado da instância para ' +
+        targetEmail +
+        '. A entrega real na caixa de entrada depende do mailer da instância.',
     })
   } catch (err) {
-    // Audit failed attempt
+    // Audit failed attempt: Sanitize error messages before persisting.
+    // Never record raw SMTP negotiation traces, passwords or credentials in audit logs.
+    let safeError = 'Falha técnica no envio de e-mail de teste'
+    let safeCode = 'MAIL_SEND_ERROR'
+
+    const rawMessage = String(err.message || err || '').toLowerCase()
+    if (
+      rawMessage.includes('auth') ||
+      rawMessage.includes('535') ||
+      rawMessage.includes('password')
+    ) {
+      safeError = 'Falha de autenticação no servidor de e-mail'
+      safeCode = 'SMTP_AUTH_FAILED'
+    } else if (rawMessage.includes('timeout') || rawMessage.includes('deadline')) {
+      safeError = 'Tempo limite excedido ao conectar ao servidor de e-mail'
+      safeCode = 'SMTP_TIMEOUT'
+    } else if (rawMessage.includes('connection refused') || rawMessage.includes('connect:')) {
+      safeError = 'Conexão recusada pelo host de e-mail'
+      safeCode = 'SMTP_CONNECTION_REFUSED'
+    } else if (rawMessage.includes('no such host') || rawMessage.includes('dns')) {
+      safeError = 'Host de e-mail não encontrado (falha de DNS)'
+      safeCode = 'SMTP_DNS_ERROR'
+    }
+
     try {
       const auditCol = e.app.findCollectionByNameOrId('audit_logs')
       const log = new Record(auditCol)
@@ -69,14 +95,18 @@ routerAdd('POST', '/backend/v1/custom/test-email', (e) => {
       log.set('userId', authRecord.id)
       log.set('userEmail', authRecord.getString('email'))
       log.set('targetEntity', 'email_settings')
-      log.set('details', JSON.stringify({ error: String(err.message || err) }))
+      // Only generic sanitized description and technical code, zero credentials or raw parameters
+      log.set(
+        'details',
+        JSON.stringify({ errorCode: safeCode, description: safeError, provider: provider }),
+      )
       e.app.save(log)
     } catch (_) {}
 
     return e.json(500, {
       success: false,
       message:
-        'Falha no envio de e-mail de teste: ' + (err.message || 'Servidor de e-mail indisponível.'),
+        safeError + ' (Código: ' + safeCode + '). Verifique o mailer gerenciado da instância.',
     })
   }
 })

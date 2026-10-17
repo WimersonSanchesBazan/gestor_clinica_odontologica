@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-10-16T19:02:23.455Z",
+  "generatedAt": "2026-10-17T17:01:03.723Z",
   "collections": [
     {
       "name": "users",
       "type": "auth",
       "apiRules": {
-        "list": "@request.auth.id != '' && (@request.auth.role = 'admin' || @request.auth.role = 'gestor' || id = @request.auth.id)",
-        "view": "@request.auth.id != '' && (@request.auth.role = 'admin' || @request.auth.role = 'gestor' || id = @request.auth.id)",
+        "list": "@request.auth.id != '' && (@request.auth.role = 'admin' || id = @request.auth.id)",
+        "view": "@request.auth.id != '' && (@request.auth.role = 'admin' || id = @request.auth.id)",
         "create": "@request.auth.id != '' && @request.auth.role = 'admin'",
         "update": "@request.auth.id != '' && (@request.auth.role = 'admin' || (id = @request.auth.id && @request.body.role:changed = false && @request.body.ativo:changed = false && @request.body.permissions:changed = false && @request.body.email:changed = false))",
         "delete": "@request.auth.id != '' && @request.auth.role = 'admin'"
@@ -607,7 +607,7 @@
       "apiRules": {
         "list": "@request.auth.id != '' && (@request.auth.role = 'admin' || @request.auth.role = 'gestor')",
         "view": "@request.auth.id != '' && (@request.auth.role = 'admin' || @request.auth.role = 'gestor')",
-        "create": "@request.auth.id != '' && (@request.auth.role = 'admin' || @request.auth.role = 'gestor')",
+        "create": null,
         "update": null,
         "delete": null
       },

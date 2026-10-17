@@ -16,8 +16,10 @@ onRecordAuthRequest((e) => {
       )
     }
 
-    // Role verification (never promote automatically)
-    const role = record.getString('role') || 'clinico'
+    // Fail-closed role verification (never promote automatically, invalid role defaults to clinico)
+    const rawRole = record.getString('role')
+    const isValidRole = rawRole === 'admin' || rawRole === 'gestor' || rawRole === 'clinico'
+    const role = isValidRole ? rawRole : 'clinico'
 
     // Log successful login on the server
     try {
@@ -317,21 +319,27 @@ onRecordUpdate((e) => {
 })
 
 // 8. Server-side logout endpoint to guarantee server-audited logout
-routerAdd('POST', '/backend/v1/custom/auth/logout', (e) => {
-  const authRecord = e.requestInfo?.auth
-  const clientIp = e.requestInfo?.ip || ''
+routerAdd('POST', '/backend/v1/custom/auth/logout', function (e) {
+  const reqAuth = e.requestInfo ? e.requestInfo.auth : null
+  const reqIp = e.requestInfo && e.requestInfo.ip ? e.requestInfo.ip : ''
 
-  if (authRecord) {
+  if (reqAuth) {
     try {
       const auditCol = e.app.findCollectionByNameOrId('audit_logs')
       const log = new Record(auditCol)
       log.set('action', 'logout')
-      log.set('userId', authRecord.id)
-      log.set('userEmail', authRecord.getString('email'))
+      log.set('userId', reqAuth.id)
+      log.set('userEmail', reqAuth.getString('email'))
       log.set('targetEntity', 'users')
-      log.set('targetId', authRecord.id)
-      log.set('ipAddress', clientIp)
-      log.set('details', JSON.stringify({ role: authRecord.getString('role') }))
+      log.set('targetId', reqAuth.id)
+      log.set('ipAddress', reqIp)
+      log.set(
+        'details',
+        JSON.stringify({
+          role: reqAuth.getString('role') || 'clinico',
+          note: 'Sessão encerrada pelo cliente. O registro em auditoria confirma a notificação ao servidor, mas não implica revogação de token stateless sem lista de bloqueio.',
+        }),
+      )
       e.app.save(log)
     } catch (err) {
       console.error('Falha ao auditar logout:', err)

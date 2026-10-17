@@ -18,7 +18,7 @@ interface AuthContextType {
   ativo: boolean
   permissions: UserPermissions
   signIn: (email: string, password: string) => Promise<{ error: any }>
-  signOut: () => void
+  signOut: () => Promise<void>
   requestPasswordReset: (email: string) => Promise<{ error: any }>
   confirmPasswordReset: (token: string, password: string) => Promise<{ error: any }>
   requestEmailChange: (newEmail: string) => Promise<{ error: any }>
@@ -48,12 +48,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [])
 
-  const currentRole: UserRole = (user?.role as UserRole) || 'admin'
-  const isAtivo: boolean = user?.ativo !== false
+  // Fail-closed role handling:
+  // - Valid roles: 'admin', 'gestor', 'clinico'
+  // - Absent or invalid role: defaults strictly to 'clinico' without administrative privileges,
+  //   never defaulting to 'admin'.
+  const rawRole = user?.role
+  const isValidRole = rawRole === 'admin' || rawRole === 'gestor' || rawRole === 'clinico'
+  const currentRole: UserRole = isValidRole ? (rawRole as UserRole) : 'clinico'
+
+  // If user has an invalid role or account is inactive, treat as non-administrative / blocked
+  const isAtivo: boolean = user?.ativo !== false && (rawRole ? isValidRole : true)
 
   const computedPermissions: UserPermissions = {
     ...ROLE_DEFAULT_PERMISSIONS[currentRole],
-    ...(user?.permissions || {}),
   }
 
   const signIn = async (email: string, password: string) => {
@@ -74,14 +81,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
-  const signOut = () => {
-    // Notify server-side logout endpoint to audit event on server
+  const signOut = async () => {
+    // Ensure the server-side logout endpoint is reached and processed BEFORE clearing the client authStore
+    // so the server can inspect the authenticated token and audit the logout action.
+    // Note: server audit of logout does not invalidate stateless JWT tokens on the server without
+    // token revoking mechanisms, but properly logs the session termination.
     try {
-      pb.send('/backend/v1/custom/auth/logout', { method: 'POST' }).catch(() => {})
-    } catch {
-      /* intentionally ignored */
+      await pb.send('/backend/v1/custom/auth/logout', { method: 'POST' })
+    } catch (err) {
+      console.warn('Falha ao comunicar logout ao servidor:', err)
+    } finally {
+      pb.authStore.clear()
     }
-    pb.authStore.clear()
   }
 
   const requestPasswordReset = async (email: string) => {
