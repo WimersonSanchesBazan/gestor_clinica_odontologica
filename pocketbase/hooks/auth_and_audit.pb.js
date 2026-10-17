@@ -4,24 +4,49 @@
 // NOTE: Automatic promotion of users without role to 'admin' HAS BEEN COMPLETELY REMOVED.
 // Every user must have an explicit role assigned by an administrator.
 onRecordAuthRequest((e) => {
-  e.next()
-
   const record = e.record
   if (record && record.collection().name === 'users') {
-    // If user is marked inactive (ativo === false), reject authentication!
+    // If user is marked inactive (ativo === false), reject authentication immediately BEFORE next!
+    // This applies to both password auth and auth-refresh!
     const isAtivo = record.getBool('ativo')
     if (record.get('ativo') !== null && isAtivo === false) {
+      // Audit blocked login/refresh attempt for inactive user
+      try {
+        const auditCol = e.app.findCollectionByNameOrId('audit_logs')
+        const log = new Record(auditCol)
+        log.set('action', 'login_inactive_blocked')
+        log.set('userId', record.id)
+        log.set('userEmail', record.getString('email'))
+        log.set('targetEntity', 'users')
+        log.set('targetId', record.id)
+        log.set('ipAddress', e.requestInfo?.ip || '')
+        log.set(
+          'details',
+          JSON.stringify({
+            reason:
+              'Tentativa de autenticação ou renovação de token por usuário inativo bloqueada.',
+          }),
+        )
+        e.app.save(log)
+      } catch (logErr) {
+        console.error('Falha ao auditar bloqueio de usuário inativo:', logErr)
+      }
+
       throw new ForbiddenError(
         'Esta conta de usuário está inativa. Entre em contato com o administrador da clínica.',
       )
     }
+  }
 
+  e.next()
+
+  if (record && record.collection().name === 'users') {
     // Fail-closed role verification (never promote automatically, invalid role defaults to clinico)
     const rawRole = record.getString('role')
     const isValidRole = rawRole === 'admin' || rawRole === 'gestor' || rawRole === 'clinico'
     const role = isValidRole ? rawRole : 'clinico'
 
-    // Log successful login on the server
+    // Log successful login on the server (skip for auth refresh if desired or log as login_success)
     try {
       const auditCol = e.app.findCollectionByNameOrId('audit_logs')
       const log = new Record(auditCol)

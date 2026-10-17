@@ -1,15 +1,15 @@
 {
-  "generatedAt": "2026-10-17T18:14:45.734Z",
+  "generatedAt": "2026-10-17T21:25:31.169Z",
   "collections": [
     {
       "name": "users",
       "type": "auth",
       "apiRules": {
-        "list": "@request.auth.id != '' && (@request.auth.role = 'admin' || id = @request.auth.id)",
-        "view": "@request.auth.id != '' && (@request.auth.role = 'admin' || id = @request.auth.id)",
-        "create": "@request.auth.id != '' && @request.auth.role = 'admin'",
-        "update": "@request.auth.id != '' && (@request.auth.role = 'admin' || (id = @request.auth.id && @request.body.role:changed = false && @request.body.ativo:changed = false && @request.body.permissions:changed = false && @request.body.email:changed = false))",
-        "delete": "@request.auth.id != '' && @request.auth.role = 'admin'"
+        "list": "@request.auth.id != '' && @request.auth.ativo = true && (@request.auth.role = 'admin' || id = @request.auth.id)",
+        "view": "@request.auth.id != '' && @request.auth.ativo = true && (@request.auth.role = 'admin' || id = @request.auth.id)",
+        "create": "@request.auth.id != '' && @request.auth.ativo = true && @request.auth.role = 'admin'",
+        "update": "@request.auth.id != '' && @request.auth.ativo = true && (@request.auth.role = 'admin' || (id = @request.auth.id && @request.body.role:changed = false && @request.body.ativo:changed = false && @request.body.permissions:changed = false && @request.body.email:changed = false))",
+        "delete": "@request.auth.id != '' && @request.auth.ativo = true && @request.auth.role = 'admin'"
       },
       "fields": [
         {
@@ -85,11 +85,11 @@
       "name": "convenios",
       "type": "base",
       "apiRules": {
-        "list": "@request.auth.id != ''",
-        "view": "@request.auth.id != ''",
-        "create": "@request.auth.id != ''",
-        "update": "@request.auth.id != ''",
-        "delete": "@request.auth.id != ''"
+        "list": "@request.auth.id != '' && @request.auth.ativo = true",
+        "view": "@request.auth.id != '' && @request.auth.ativo = true",
+        "create": "@request.auth.id != '' && @request.auth.ativo = true && (@request.auth.role = 'admin' || @request.auth.role = 'gestor')",
+        "update": "@request.auth.id != '' && @request.auth.ativo = true && (@request.auth.role = 'admin' || @request.auth.role = 'gestor')",
+        "delete": "@request.auth.id != '' && @request.auth.ativo = true && @request.auth.role = 'admin'"
       },
       "fields": [
         {
@@ -119,11 +119,11 @@
       "name": "agendamentos",
       "type": "base",
       "apiRules": {
-        "list": "@request.auth.id != ''",
-        "view": "@request.auth.id != ''",
-        "create": "@request.auth.id != ''",
-        "update": "@request.auth.id != ''",
-        "delete": "@request.auth.id != ''"
+        "list": "@request.auth.id != '' && @request.auth.ativo = true",
+        "view": "@request.auth.id != '' && @request.auth.ativo = true",
+        "create": "@request.auth.id != '' && @request.auth.ativo = true",
+        "update": "@request.auth.id != '' && @request.auth.ativo = true",
+        "delete": "@request.auth.id != '' && @request.auth.ativo = true && (@request.auth.role = 'admin' || @request.auth.role = 'gestor')"
       },
       "fields": [
         {
@@ -167,11 +167,11 @@
       "name": "lancamentos_financeiros",
       "type": "base",
       "apiRules": {
-        "list": "@request.auth.id != '' && (@request.auth.role = 'admin' || @request.auth.role = 'gestor')",
-        "view": "@request.auth.id != '' && (@request.auth.role = 'admin' || @request.auth.role = 'gestor')",
-        "create": "@request.auth.id != '' && (@request.auth.role = 'admin' || @request.auth.role = 'gestor')",
-        "update": "@request.auth.id != '' && (@request.auth.role = 'admin' || @request.auth.role = 'gestor')",
-        "delete": "@request.auth.id != '' && @request.auth.role = 'admin'"
+        "list": "@request.auth.id != '' && @request.auth.ativo = true && (@request.auth.role = 'admin' || @request.auth.role = 'gestor')",
+        "view": "@request.auth.id != '' && @request.auth.ativo = true && (@request.auth.role = 'admin' || @request.auth.role = 'gestor')",
+        "create": "@request.auth.id != '' && @request.auth.ativo = true && (@request.auth.role = 'admin' || @request.auth.role = 'gestor')",
+        "update": "@request.auth.id != '' && @request.auth.ativo = true && (@request.auth.role = 'admin' || @request.auth.role = 'gestor')",
+        "delete": "@request.auth.id != '' && @request.auth.ativo = true && @request.auth.role = 'admin'"
       },
       "fields": [
         {
@@ -280,11 +280,11 @@
       "name": "profissionais",
       "type": "base",
       "apiRules": {
-        "list": "@request.auth.id != ''",
-        "view": "@request.auth.id != ''",
-        "create": "@request.auth.id != ''",
-        "update": "@request.auth.id != ''",
-        "delete": "@request.auth.id != ''"
+        "list": "@request.auth.id != '' && @request.auth.ativo = true",
+        "view": "@request.auth.id != '' && @request.auth.ativo = true",
+        "create": "@request.auth.id != '' && @request.auth.ativo = true && @request.auth.role = 'admin'",
+        "update": "@request.auth.id != '' && @request.auth.ativo = true && @request.auth.role = 'admin'",
+        "delete": "@request.auth.id != '' && @request.auth.ativo = true && @request.auth.role = 'admin'"
       },
       "fields": [
         {
@@ -312,6 +312,25 @@
           "required": false,
           "system": false,
           "autodateTriggers": ["onCreate", "onUpdate"]
+        },
+        {
+          "name": "cor",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "ativo",
+          "type": "bool",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "user_id",
+          "type": "relation",
+          "required": false,
+          "system": false,
+          "collectionRef": "users"
         }
       ],
       "indexes": []
@@ -320,11 +339,11 @@
       "name": "colaboradores",
       "type": "base",
       "apiRules": {
-        "list": "@request.auth.id != ''",
-        "view": "@request.auth.id != ''",
-        "create": "@request.auth.id != '' && (@request.auth.role = 'admin' || @request.auth.role = 'gestor')",
-        "update": "@request.auth.id != '' && (@request.auth.role = 'admin' || @request.auth.role = 'gestor')",
-        "delete": "@request.auth.id != '' && @request.auth.role = 'admin'"
+        "list": "@request.auth.id != '' && @request.auth.ativo = true",
+        "view": "@request.auth.id != '' && @request.auth.ativo = true",
+        "create": "@request.auth.id != '' && @request.auth.ativo = true && (@request.auth.role = 'admin' || @request.auth.role = 'gestor')",
+        "update": "@request.auth.id != '' && @request.auth.ativo = true && (@request.auth.role = 'admin' || @request.auth.role = 'gestor')",
+        "delete": "@request.auth.id != '' && @request.auth.ativo = true && @request.auth.role = 'admin'"
       },
       "fields": [
         {
@@ -428,10 +447,10 @@
       "name": "crm_leads",
       "type": "base",
       "apiRules": {
-        "list": "@request.auth.id != ''",
-        "view": "@request.auth.id != ''",
-        "create": "@request.auth.id != ''",
-        "update": "@request.auth.id != ''",
+        "list": "@request.auth.id != '' && @request.auth.ativo = true",
+        "view": "@request.auth.id != '' && @request.auth.ativo = true",
+        "create": "@request.auth.id != '' && @request.auth.ativo = true",
+        "update": "@request.auth.id != '' && @request.auth.ativo = true",
         "delete": null
       },
       "fields": [
@@ -531,11 +550,11 @@
       "name": "documentos_paciente",
       "type": "base",
       "apiRules": {
-        "list": "@request.auth.id != ''",
-        "view": "@request.auth.id != ''",
-        "create": "@request.auth.id != ''",
-        "update": "@request.auth.id != ''",
-        "delete": "@request.auth.id != ''"
+        "list": "@request.auth.id != '' && @request.auth.ativo = true",
+        "view": "@request.auth.id != '' && @request.auth.ativo = true",
+        "create": "@request.auth.id != '' && @request.auth.ativo = true",
+        "update": "@request.auth.id != '' && @request.auth.ativo = true",
+        "delete": "@request.auth.id != '' && @request.auth.ativo = true && (@request.auth.role = 'admin' || @request.auth.role = 'gestor')"
       },
       "fields": [
         {
@@ -605,8 +624,8 @@
       "name": "audit_logs",
       "type": "base",
       "apiRules": {
-        "list": "@request.auth.id != '' && (@request.auth.role = 'admin' || @request.auth.role = 'gestor')",
-        "view": "@request.auth.id != '' && (@request.auth.role = 'admin' || @request.auth.role = 'gestor')",
+        "list": "@request.auth.id != '' && @request.auth.ativo = true && (@request.auth.role = 'admin' || @request.auth.role = 'gestor')",
+        "view": "@request.auth.id != '' && @request.auth.ativo = true && (@request.auth.role = 'admin' || @request.auth.role = 'gestor')",
         "create": null,
         "update": null,
         "delete": null
@@ -679,10 +698,10 @@
       "name": "email_settings",
       "type": "base",
       "apiRules": {
-        "list": "@request.auth.id != '' && @request.auth.role = 'admin'",
-        "view": "@request.auth.id != '' && @request.auth.role = 'admin'",
-        "create": "@request.auth.id != '' && @request.auth.role = 'admin'",
-        "update": "@request.auth.id != '' && @request.auth.role = 'admin'",
+        "list": "@request.auth.id != '' && @request.auth.ativo = true && @request.auth.role = 'admin'",
+        "view": "@request.auth.id != '' && @request.auth.ativo = true && @request.auth.role = 'admin'",
+        "create": "@request.auth.id != '' && @request.auth.ativo = true && @request.auth.role = 'admin'",
+        "update": "@request.auth.id != '' && @request.auth.ativo = true && @request.auth.role = 'admin'",
         "delete": null
       },
       "fields": [
