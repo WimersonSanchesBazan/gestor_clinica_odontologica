@@ -3,7 +3,7 @@
 **Sistema:** Gestão Clínica Odontológica (PocketBase / Skip Cloud)  
 **Versão:** v0.0.7  
 **Data:** data não verificável (ambiente de execução sem relógio de parede certificado)  
-**Hash do Commit:** PENDENTE DE COMMIT (será gerado na conclusão deste ciclo)
+**Hash do Commit:** 92a33fe (versão 0.0.7)
 
 ---
 
